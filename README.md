@@ -1,0 +1,1 @@
+# Gerenciador-de-Partidas-Banco-Imobili-rio
