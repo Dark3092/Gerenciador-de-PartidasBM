@@ -289,7 +289,7 @@
 
     let playerCard = document.createElement("div");
     playerCard.id = `player-${index}`;
-    playerCard.className = "card p-4 mb-4";
+    playerCard.className = "card p-4 mb-4 player-card";
 
     playerCard.innerHTML = `
                     <div class="d-flex justify-content-between align-items-start mb-3">
@@ -650,7 +650,7 @@
 
             availableProperties = newProperties;
             localStorage.setItem('customProperties', JSON.stringify(availableProperties));
-            updatePlayersDisplay();
+            updatePlayerList();
 
             bootstrap.Modal.getInstance(document.getElementById('propertyEditorModal')).hide();
             alert('✅ Nomes atualizados com sucesso!');
@@ -671,9 +671,35 @@
 
             availableProperties = [...defaultProperties];
             localStorage.setItem('customProperties', JSON.stringify(availableProperties));
-            updatePlayersDisplay();
+            updatePlayerList();
             openPropertyEditor();
 
             alert('✅ Nomes restaurados!');
         }
     }
+
+    // ============================================
+    // SISTEMA DE TEMA CLARO/ESCURO
+    // ============================================
+
+    // Carregar tema salvo
+    function loadTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.className = `container py-4 ${savedTheme}-theme`;
+        document.getElementById('checkbox').checked = (savedTheme === 'dark');
+    }
+
+    // Alternar tema
+    function toggleTheme() {
+        const checkbox = document.getElementById('checkbox');
+        const currentTheme = checkbox.checked ? 'dark' : 'light';
+
+        document.body.className = `container py-4 ${currentTheme}-theme`;
+        localStorage.setItem('theme', currentTheme);
+
+        // Animação suave
+        document.body.style.transition = 'background-color 3.0s ease, color 3.0s ease';
+    }
+
+    // Executar ao carregar a página
+    loadTheme();
