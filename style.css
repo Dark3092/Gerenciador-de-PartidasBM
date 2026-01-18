@@ -399,3 +399,18 @@ body.light-theme .game-card-description {
 body.light-theme .game-card-players {
     color: #0066cc;
 }
+
+/* ============================================
+   AJUSTE MOBILE (CELULAR)
+   ============================================ */
+@media (max-width: 767px) {
+    /* Adiciona espaço abaixo de cada coluna quando estiver no celular */
+    .col-md-3 {
+        margin-bottom: 15px !important;
+    }
+
+    /* Garante que o último item não tenha margem desnecessária */
+    .col-md-3:last-child {
+        margin-bottom: 0 !important;
+    }
+}
