@@ -55,20 +55,75 @@
             <span class="badge bg-danger rounded-pill button-new">NOVO</span>
         </div>
     </div>
-    
+
     <div class="row mb-4">
-        <div class="col-md-6">
-            <button class="btn btn-warning w-100" onclick="newSave()">Novo Save</button>
+        <div class="col-md-3">
+            <button class="btn btn-success w-100" onclick="openSaveGameModal()">💾 Salvar Jogo</button>
         </div>
-        <div class="col-md-6">
-            <button class="btn btn-info w-100" onclick="loadSaveFromFile()">Carregar Save</button>
+        <div class="col-md-3">
+            <button class="btn btn-primary w-100" onclick="openLoadGameModal()">📂 Carregar Jogo</button>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-warning w-100" onclick="newSave()">🆕 Novo Save</button>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-info w-100" onclick="loadSaveFromFile()">📥 Importar Arquivo</button>
             <input type="file" id="loadSaveInput" style="display: none;" accept=".json" onchange="handleFileSelect(event)">
         </div>
     </div>
 
     <h2 class="mt-4 mb-3">Jogadores</h2>
     <div id="playersList"></div>
-    
+
+    <!-- Modal para Carregar Jogo -->
+    <div class="modal fade" id="loadGameModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header">
+                    <h5 class="modal-title">📂 Carregar Jogo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="savedGamesList" class="saved-games-list">
+                        <!-- Lista será preenchida dinamicamente -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Salvar Jogo -->
+    <div class="modal fade" id="saveGameModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header">
+                    <h5 class="modal-title">💾 Salvar Jogo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="gameName" class="form-label">Nome do Jogo *</label>
+                        <input type="text" id="gameName" class="form-control" placeholder="Ex: Jogo de Domingo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="gameDescription" class="form-label">Descrição (opcional)</label>
+                        <textarea id="gameDescription" class="form-control" rows="3" placeholder="Adicione detalhes sobre este jogo..."></textarea>
+                    </div>
+                    <div class="alert alert-info mb-0">
+                        <strong>ℹ️ Info:</strong> Salvará <span id="playerCount">0</span> jogador(es)
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="saveGame()">💾 Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para seleção múltipla de propriedades -->
     <div class="modal fade" id="propertyModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -131,7 +186,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-success" onclick="savePropertyNames()">💾 Salvar Alterações</button>
                     <button type="button" class="btn btn-warning" onclick="resetPropertyNames()">🔄 Restaurar Padrão</button>
                 </div>
             </div>

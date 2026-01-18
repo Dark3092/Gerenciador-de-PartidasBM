@@ -1,4 +1,13 @@
 
+// ============================================
+// CONFIGURAÇÃO PANTRY (Substituto do GitHub)
+// ============================================
+
+// Pegue seu ID no site getpantry.cloud
+const PANTRY_ID = '544a94e3-a104-43c6-b6ad-f6c48b86a7f8';
+const BASKET_NAME = 'bancoimobiliario'; // O nome do "arquivo"
+const API_URL = `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/${BASKET_NAME}`;
+let cachedSaves = {};
 
     let players = [];
     let currentPlayerForProperties = -1;
@@ -14,38 +23,32 @@
 
     let availableProperties  = [...defaultProperties];
 
-    // Carregar propriedades personalizadas ao iniciar
-    function loadCustomProperties() {
-        const saved = localStorage.getItem('customProperties');
-        if (saved) {
-            try {
-                availableProperties = JSON.parse(saved);
-            } catch (e) {
-                console.error('Erro ao carregar propriedades:', e);
-                availableProperties = [...defaultProperties];
-            }
+// Carregar propriedades personalizadas (do GitHub Gist)
+// Carregar propriedades personalizadas (Apenas LocalStorage)
+function loadCustomProperties() {
+    const saved = localStorage.getItem('customProperties');
+    if (saved) {
+        try {
+            availableProperties = JSON.parse(saved);
+        } catch (e) {
+            availableProperties = [...defaultProperties];
         }
+    } else {
+        availableProperties = [...defaultProperties];
     }
+}
 
     // Executar ao carregar a página
     loadCustomProperties();
 
     // Inicializar o Modal de Bootstrap
     let propertyModal;
-    document.addEventListener('DOMContentLoaded', function() {
-    propertyModal = new bootstrap.Modal(document.getElementById('propertyModal'));
+    document.addEventListener('DOMContentLoaded', async function()
+    {
+        propertyModal = new bootstrap.Modal(document.getElementById('propertyModal'));
 
-    // Tentar carregar dados salvos localmente
-    const savedData = localStorage.getItem('playersData');
-    if (savedData) {
-    try {
-    players = JSON.parse(savedData);
-    updatePlayerList();
-} catch (e) {
-    console.error("Erro ao carregar dados salvos:", e);
-}
-}
-});
+        // Tentar carregar jogadores do GitHub
+    });
 
     function addPlayer() {
     const name = document.getElementById('playerName').value.trim();
@@ -183,7 +186,6 @@
     houseControls.classList.toggle('d-none', !this.checked);
 });
 });
-
     propertyModal.show();
 }
 
@@ -326,46 +328,52 @@
 });
 }
 
-    function saveToLocalStorage() {
-    try {
-    localStorage.setItem('playersData', JSON.stringify(players));
-} catch (e) {
-    console.error("Erro ao salvar dados:", e);
-}
-}
+    async function saveToLocalStorage() {
+        try {
+            localStorage.setItem('playersData', JSON.stringify(players));
 
-    function newSave() {
-    if (confirm("Tem certeza que deseja criar um novo save? Todos os dados atuais serão perdidos.")) {
-    players = [];
-    updatePlayerList();
-    saveToLocalStorage();
-}
-}
+            // Salvar no GitHub Gist
+        } catch (e) {
+            console.error("Erro ao salvar dados:", e);
+        }
+    }
+
+    async function newSave()
+    {
+        if (confirm("Tem certeza que deseja criar um novo save? Todos os dados atuais serão perdidos."))
+        {
+            players = [];
+            updatePlayerList();
+            await saveToLocalStorage();
+            alert('✅ Novo save criado e salvo na nuvem!');
+        }
+    }
 
     function loadSaveFromFile() {
     document.getElementById('loadSaveInput').click();
 }
 
-    function handleFileSelect(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+    async function handleFileSelect(event)
+    {
+        const file = event.target.files[0];
+        if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-    try {
-    const loadedData = JSON.parse(e.target.result);
-    if (Array.isArray(loadedData)) {
-    players = loadedData;
-    updatePlayerList();
-    saveToLocalStorage();
-    alert("Save carregado com sucesso!");
-} else {
-    alert("Formato de arquivo inválido.");
-}
-} catch (error) {
-    alert("Erro ao ler o arquivo: " + error.message);
-}
-};
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+        try {
+            const loadedData = JSON.parse(e.target.result);
+            if (Array.isArray(loadedData)) {
+                players = loadedData;
+                updatePlayerList();
+                await saveToLocalStorage();
+                alert("Save carregado e sincronizado com a nuvem!");
+            } else {
+                alert("Formato de arquivo inválido.");
+            }
+        } catch (error) {
+            alert("Erro ao ler o arquivo: " + error.message);
+        }
+    };
     reader.readAsText(file);
 }
 
@@ -522,161 +530,115 @@
 }
 
     // Abrir CRUD de propriedades
-    function openPropertyEditor() {
-        const streetContainer = document.getElementById('streetProperties');
-        const stockContainer = document.getElementById('stockProperties');
+// ============================================
+// 7. EDITAR NOMES DE RUAS (CRUD OTIMIZADO)
+// ============================================
 
-        streetContainer.innerHTML = '';
-        stockContainer.innerHTML = '';
+// Função auxiliar apenas para desenhar a lista (SEM ABRE MODAL)
+function renderPropertiesList() {
+    const streetContainer = document.getElementById('streetProperties');
+    const stockContainer = document.getElementById('stockProperties');
+    streetContainer.innerHTML = '';
+    stockContainer.innerHTML = '';
 
-        availableProperties.forEach((prop, index) => {
-            const isStock = prop.toLowerCase().includes('ações');
-            const container = isStock ? stockContainer : streetContainer;
+    availableProperties.forEach((prop, index) => {
+        const isStock = prop.toLowerCase().includes('ações');
+        const container = isStock ? stockContainer : streetContainer;
 
-            // Verificar se a propriedade está em uso
-            let isInUse = false;
-            players.forEach(player => {
-                if (player.properties.some(p => p.name === prop)) {
-                    isInUse = true;
-                }
-            });
+        let isInUse = false;
+        if(typeof players !== 'undefined') {
+            isInUse = players.some(pl => pl.properties.some(p => p.name === prop));
+        }
 
-            const div = document.createElement('div');
-            div.className = 'mb-2';
-            div.innerHTML = `
+        const div = document.createElement('div');
+        div.className = 'mb-2';
+        // O evento oninput chama a função de salvar a cada letra digitada
+        div.innerHTML = `
             <div class="input-group input-group-sm">
                 <span class="input-group-text" style="width: 40px;">${index + 1}</span>
                 <input type="text" 
-                       class="form-control property-name-input" 
-                       data-index="${index}" 
+                       class="form-control" 
                        value="${prop}"
-                       placeholder="Nome da propriedade">
+                       oninput="autoSavePropertyName(${index}, this.value)">
                 <button class="btn btn-danger btn-sm" 
                         onclick="deleteProperty(${index})"
-                        ${isInUse ? 'disabled title="Propriedade em uso por um jogador"' : ''}>
+                        ${isInUse ? 'disabled title="Propriedade em uso"' : ''}>
                     🗑️
                 </button>
-            </div>
-            ${isInUse ? '<small class="text-warning">⚠️ Em uso - não pode ser excluída</small>' : ''}
-        `;
-            container.appendChild(div);
-        });
+            </div>`;
+        container.appendChild(div);
+    });
+}
 
-        const modal = new bootstrap.Modal(document.getElementById('propertyEditorModal'));
-        modal.show();
+// 1. Abrir o Editor (Abre o modal e desenha a lista)
+    function openPropertyEditor() {
+        renderPropertiesList();
+
+        const modalElement = document.getElementById('propertyEditorModal');
+
+        const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+
+        modalInstance.show();
     }
 
-    // Adicionar nova propriedade
-    function addNewProperty() {
-        const nameInput = document.getElementById('newPropertyName');
-        const typeSelect = document.getElementById('newPropertyType');
-        const name = nameInput.value.trim();
+// 2. Adicionar Nova Propriedade
+function addNewProperty() {
+    const nameInput = document.getElementById('newPropertyName');
+    const typeSelect = document.getElementById('newPropertyType');
+    const rawName = nameInput.value.trim();
 
-        if (!name) {
-            alert('⚠️ Digite um nome para a propriedade!');
-            return;
-        }
+    if (!rawName) { alert('Digite um nome!'); return; }
 
-        // Verificar se já existe
-        if (availableProperties.includes(name)) {
-            alert('⚠️ Esta propriedade já existe!');
-            return;
-        }
+    // Lógica para adicionar prefixo "Ações" se necessário
+    const finalName = typeSelect.value === 'stock' && !rawName.toLowerCase().includes('ações')
+        ? `Ações ${rawName}`
+        : rawName;
 
-        // Adicionar "Ações" no nome se for do tipo stock
-        const finalName = typeSelect.value === 'stock' && !name.toLowerCase().includes('ações')
-            ? `Ações ${name}`
-            : name;
-
-        availableProperties.push(finalName);
-
-        // Limpar input
-        nameInput.value = '';
-
-        // Reabrir modal atualizado
-        openPropertyEditor();
-
-        alert(`✅ Propriedade "${finalName}" adicionada!`);
+    if (availableProperties.includes(finalName)) {
+        alert('Esta propriedade já existe!');
+        return;
     }
 
-    // Excluir propriedade
-    function deleteProperty(index) {
-        const propName = availableProperties[index];
+    availableProperties.push(finalName);
+    saveToLocalStorage(); // Salva no PC
 
-        // Verificar se está em uso
-        let isInUse = false;
-        players.forEach(player => {
-            if (player.properties.some(p => p.name === propName)) {
-                isInUse = true;
-            }
-        });
+    renderPropertiesList(); // ATUALIZA A LISTA SEM REABRIR O MODAL
+    nameInput.value = '';
+}
 
-        if (isInUse) {
-            alert('⚠️ Esta propriedade está em uso por um jogador e não pode ser excluída!');
-            return;
-        }
+// 3. Deletar Propriedade
+function deleteProperty(index) {
+    const propName = availableProperties[index];
+    const isInUse = players.some(pl => pl.properties.some(p => p.name === propName));
 
-        if (confirm(`🗑️ Tem certeza que deseja excluir "${propName}"?`)) {
-            availableProperties.splice(index, 1);
-            openPropertyEditor();
-            alert('✅ Propriedade excluída!');
-        }
+    if (isInUse) {
+        alert("Não é possível excluir: Propriedade em uso por um jogador.");
+        return;
     }
 
-    // Salvar nomes das propriedades
-    function savePropertyNames() {
-        const inputs = document.querySelectorAll('.property-name-input');
-        const newProperties = [];
-
-        inputs.forEach(input => {
-            const value = input.value.trim();
-            if (value) {
-                newProperties.push(value);
-            } else {
-                alert('⚠️ Todos os campos devem ser preenchidos!');
-                return;
-            }
-        });
-
-        if (newProperties.length === defaultProperties.length) {
-            players.forEach(player => {
-                player.properties.forEach(prop => {
-                    const oldIndex = availableProperties.indexOf(prop.name);
-                    if (oldIndex !== -1) {
-                        prop.name = newProperties[oldIndex];
-                    }
-                });
-            });
-
-            availableProperties = newProperties;
-            localStorage.setItem('customProperties', JSON.stringify(availableProperties));
-            updatePlayerList();
-
-            bootstrap.Modal.getInstance(document.getElementById('propertyEditorModal')).hide();
-            alert('✅ Nomes atualizados com sucesso!');
-        }
+    if (confirm("Excluir esta propriedade?")) {
+        availableProperties.splice(index, 1);
+        saveToLocalStorage(); // Salva no PC
+        renderPropertiesList(); // ATUALIZA A LISTA SEM REABRIR O MODAL
     }
+}
 
-    // Restaurar nomes padrão
-    function resetPropertyNames() {
-        if (confirm('⚠️ Tem certeza que deseja restaurar os nomes padrão?')) {
-            players.forEach(player => {
-                player.properties.forEach(prop => {
-                    const oldIndex = availableProperties.indexOf(prop.name);
-                    if (oldIndex !== -1) {
-                        prop.name = defaultProperties[oldIndex];
-                    }
-                });
-            });
-
-            availableProperties = [...defaultProperties];
-            localStorage.setItem('customProperties', JSON.stringify(availableProperties));
-            updatePlayerList();
-            openPropertyEditor();
-
-            alert('✅ Nomes restaurados!');
-        }
+// 4. Salvar Automaticamente ao Digitar (Substitui o botão Salvar)
+function autoSavePropertyName(index, newValue) {
+    if (newValue && newValue.trim() !== "") {
+        availableProperties[index] = newValue;
+        saveToLocalStorage(); // Salva instantaneamente no PC
     }
+}
+
+// 5. Restaurar Padrão
+function resetPropertyNames() {
+    if(confirm("Restaurar nomes originais?")) {
+        availableProperties = [...defaultProperties];
+        saveToLocalStorage();
+        renderPropertiesList(); // ATUALIZA A LISTA SEM REABRIR O MODAL
+    }
+}
 
     // ============================================
     // SISTEMA DE TEMA CLARO/ESCURO
@@ -701,5 +663,160 @@
         document.body.style.transition = 'background-color 3.0s ease, color 3.0s ease';
     }
 
-    // Executar ao carregar a página
-    loadTheme();
+// Salvar propriedades no GitHub Gist
+
+// Salvar jogadores no GitHub Gist
+
+// ============================================
+// SISTEMA DE MÚLTIPLOS SAVES (PANTRY)
+// ============================================
+
+function openSaveGameModal() {
+    if (players.length === 0) {
+        alert('⚠️ Adicione pelo menos um jogador antes de salvar!');
+        return;
+    }
+    document.getElementById('playerCount').textContent = players.length;
+    document.getElementById('gameName').value = '';
+    document.getElementById('gameDescription').value = '';
+    const modal = new bootstrap.Modal(document.getElementById('saveGameModal'));
+    modal.show();
+}
+
+async function saveGame() {
+    const gameName = document.getElementById('gameName').value.trim();
+    const gameDescription = document.getElementById('gameDescription').value.trim();
+
+    if (!gameName) {
+        alert('⚠️ Digite um nome para o jogo!');
+        return;
+    }
+
+    // Cria a chave única (Ex: "Jogo 1" vira "Jogo_1")
+    const saveKey = gameName.replace(/\s+/g, '_');
+
+    try {
+        document.body.style.cursor = 'wait';
+
+        // 1. PRIMEIRO: Baixamos o que já existe na nuvem para não perder nada
+        let currentSaves = {};
+        try {
+            const getResponse = await fetch(API_URL);
+            if (getResponse.ok) {
+                currentSaves = await getResponse.json();
+            }
+        } catch (e) {
+            console.log('Criando a primeira lista de saves...');
+        }
+
+        // 2. SEGUNDO: Adicionamos o NOVO jogo dentro da lista que baixamos
+        currentSaves[saveKey] = {
+            name: gameName,
+            description: gameDescription,
+            players: players,
+            properties: availableProperties,
+            createdAt: currentSaves[saveKey]?.createdAt || new Date().toISOString(), // Mantém data original se for edição
+            updatedAt: new Date().toISOString(),
+            totalPlayers: players.length,
+            version: '2.0'
+        };
+
+        // 3. TERCEIRO: Enviamos a lista COMPLETA de volta usando PUT (que substitui com segurança)
+        const response = await fetch(API_URL, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(currentSaves)
+        });
+
+        if (!response.ok) throw new Error('Erro ao salvar na nuvem');
+
+        bootstrap.Modal.getInstance(document.getElementById('saveGameModal')).hide();
+        alert(`✅ Jogo "${gameName}" salvo na lista com sucesso!`);
+
+    } catch (error) {
+        alert('❌ Erro: ' + error.message);
+    } finally {
+        document.body.style.cursor = 'default';
+    }
+}
+
+async function openLoadGameModal() {
+    const modal = new bootstrap.Modal(document.getElementById('loadGameModal'));
+    const listContainer = document.getElementById('savedGamesList');
+    listContainer.innerHTML = '<div class="text-center p-3"><div class="spinner-border text-primary"></div><p>Buscando saves...</p></div>';
+    modal.show();
+
+    try
+    {
+        const response = await fetch(API_URL);
+        if (!response.ok) { listContainer.innerHTML = '<div class="alert alert-info">Nenhum save encontrado.</div>'; return; }
+
+        const allData = await response.json();
+        cachedSaves = allData;
+        listContainer.innerHTML = '';
+
+        const saveKeys = Object.keys(allData);
+        if (saveKeys.length === 0) { listContainer.innerHTML = '<div class="alert alert-info">Lista vazia.</div>'; return; }
+
+        saveKeys.forEach(key => {
+            const save = allData[key];
+            if (!save.players) return;
+            const date = new Date(save.createdAt).toLocaleString('pt-BR');
+            const playerNames = save.players.map(p => p.name).join(', ');
+
+            const card = document.createElement('div');
+            card.className = 'card mb-3 bg-secondary text-light border-light';
+            card.innerHTML = `
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="card-title mb-0 text-warning">${save.name}</h5>
+                        <small class="text-white-50">${date}</small>
+                    </div>
+                    <p class="card-text small">${save.description || ''}</p>
+                    <p class="card-text"><small>👥 ${playerNames}</small></p>
+                    <div class="d-flex gap-2 justify-content-end">
+                        <button class="btn btn-sm btn-primary" onclick="loadGame('${key}')">📂 Carregar</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteGame('${key}')">🗑️ Excluir</button>
+                    </div>
+                </div>`;
+            listContainer.appendChild(card);
+        });
+    } catch (error) {
+        listContainer.innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
+    }
+}
+
+function loadGame(key) {
+    if (!confirm('⚠️ Isso substituirá o jogo atual. Continuar?')) return;
+    const save = cachedSaves[key];
+    if (save) {
+        players = save.players;
+        if(save.properties) availableProperties = save.properties;
+        updatePlayerList();
+        localStorage.setItem('playersData', JSON.stringify(players));
+        localStorage.setItem('customProperties', JSON.stringify(availableProperties));
+        bootstrap.Modal.getInstance(document.getElementById('loadGameModal')).hide();
+        alert(`✅ Jogo "${save.name}" carregado!`);
+    }
+}
+
+async function deleteGame(key) {
+    if (!confirm('🗑️ Excluir este save?')) return;
+    try {
+        delete cachedSaves[key];
+        document.body.style.cursor = 'wait';
+        await fetch(API_URL, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cachedSaves)
+        });
+        alert('✅ Excluído!');
+        openLoadGameModal();
+    } catch (error) {
+        alert('Erro: ' + error.message);
+    } finally {
+        document.body.style.cursor = 'default';
+    }
+}
+// Executar ao carregar a página
+loadTheme();

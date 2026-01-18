@@ -318,3 +318,84 @@ body.dark-theme h6,
 body.dark-theme p {
     color: #ffffff !important;
 }
+
+/* ============================================
+   LISTA DE JOGOS SALVOS
+   ============================================ */
+.saved-games-list {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.game-card {
+    border: 2px solid #404040;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.game-card:hover {
+    border-color: #6c757d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.game-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 10px;
+}
+
+.game-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.game-card-date {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+.game-card-description {
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+.game-card-players {
+    font-size: 0.9rem;
+    color: #6fa8dc;
+}
+
+.game-card-actions {
+    margin-top: 10px;
+}
+
+.empty-games-message {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+/* Tema Claro */
+body.light-theme .game-card {
+    border-color: #dee2e6;
+    background-color: #f8f9fa;
+}
+
+body.light-theme .game-card:hover {
+    border-color: #6c757d;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .game-card-date,
+body.light-theme .game-card-description {
+    color: #666;
+}
+
+body.light-theme .game-card-players {
+    color: #0066cc;
+}
