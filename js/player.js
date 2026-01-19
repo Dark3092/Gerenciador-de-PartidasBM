@@ -46,7 +46,7 @@ function updatePlayerList() {
             propertiesHTML = '<ul class="list-group mt-3">';
             player.properties.forEach((prop, propIndex) => {
                 propertiesHTML += `
-                            <li class="list-group-item bg-dark text-light d-flex justify-content-between align-items-center">
+                            <li class="list-group-item bg-dark text-light d-flex justify-content-between align-items-center mobile-prop-row">
                                 <div>
                                     ${prop.name} 
                                     <span class="badge bg-secondary ms-2">
@@ -54,8 +54,8 @@ function updatePlayerList() {
                                     </span>
                                 </div>
                                 <div>
-                                    <button class="btn btn-sm btn-success" onclick="addHouse(${index}, ${propIndex})">+ Casa</button>
-                                    <button class="btn btn-sm btn-warning" onclick="removeHouse(${index}, ${propIndex})">- Casa</button>
+                                    <button class="btn btn-sm btn-success" onclick="addHouse(${index}, ${propIndex})">+</button>
+                                    <button class="btn btn-sm btn-warning" onclick="removeHouse(${index}, ${propIndex})">-</button>
                                     <button class="btn btn-sm btn-danger" onclick="removeProperty(${index}, ${propIndex})">Remover</button>
                                 </div>
                             </li>

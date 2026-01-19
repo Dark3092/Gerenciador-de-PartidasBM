@@ -51,3 +51,11 @@ function handleFileSelect(event) {
 function loadSaveFromFile() {
     document.getElementById('loadSaveInput').click();
 }
+
+function newSave() {
+    if (confirm("Limpar a tela para começar um jogo novo?")) {
+        players = [];
+        updatePlayerList();
+        saveToLocalStorage();
+    }
+}

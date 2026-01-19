@@ -111,16 +111,18 @@ body.dark-theme .alert-warning {
    SWITCH ANIMADO SOL/LUA
    ============================================ */
 
-.theme-switch-wrapper {
-    display: flex;
-    align-items: center;
+.theme-switch-wrapper.top-right {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000; /* Garante que fique acima de tudo */
 }
 
 .theme-switch {
     display: inline-block;
-    height: 40px;
+    height: 30px;     /* Reduzido de 40px */
     position: relative;
-    width: 80px;
+    width: 60px;      /* Reduzido de 80px */
 }
 
 .theme-switch input {
@@ -140,17 +142,19 @@ body.dark-theme .alert-warning {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* A bolinha branca */
 .slider:before {
     background-color: #fff;
     bottom: 4px;
     content: "";
-    height: 32px;
+    height: 22px;     /* Reduzido de 32px */
     left: 4px;
     position: absolute;
     transition: 0.4s;
-    width: 32px;
+    width: 22px;      /* Reduzido de 32px */
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 2;
 }
 
 input:checked + .slider {
@@ -158,7 +162,7 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-    transform: translateX(40px);
+    transform: translateX(30px); /* Ajustado para o novo tamanho */
 }
 
 /* Animação dos ícones */
@@ -167,17 +171,18 @@ input:checked + .slider:before {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 20px;
+    font-size: 14px;
     transition: all 0.4s ease;
+    z-index: 1;
 }
 
 .sun {
-    left: 8px;
+    left: 6px;
     opacity: 1;
 }
 
 .moon {
-    right: 8px;
+    right: 6px;
     opacity: 0;
 }
 
@@ -405,12 +410,52 @@ body.light-theme .game-card-players {
    ============================================ */
 @media (max-width: 767px) {
     /* Adiciona espaço abaixo de cada coluna quando estiver no celular */
-    .col-md-3 {
+    .col-md-3, .col-md-4, .col-md-6 {
         margin-bottom: 15px !important;
     }
 
     /* Garante que o último item não tenha margem desnecessária */
-    .col-md-3:last-child {
+    .col-md-3:last-child, .col-md-4:last-child, .col-md-6:last-child {
         margin-bottom: 0 !important;
+    }
+}
+
+/* ============================================
+   LISTA DE PROPRIEDADES (MOBILE FRIENDLY)
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* 1. Transforma a linha em coluna (um em cima do outro) */
+    .mobile-prop-row {
+        flex-direction: column !important;
+        align-items: stretch !important; /* Estica para ocupar a largura toda */
+        padding: 15px !important;
+        gap: 10px; /* Espaço entre o nome e os botões */
+    }
+
+    /* 2. Estiliza o Nome da Propriedade */
+    .mobile-prop-row > div:first-child {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+        white-space: normal; /* Permite que nomes longos quebrem linha */
+    }
+
+    /* 3. Estiliza o container dos botões */
+    .mobile-prop-row > div:last-child {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px; /* Espacinho entre os botões */
+    }
+
+    /* 4. Aumenta os botões para ficar bom de clicar */
+    .mobile-prop-row .btn {
+        flex: 1; /* Faz os 3 botões terem o mesmo tamanho exato */
+        padding: 8px 0; /* Aumenta a altura do clique */
+        font-size: 0.9rem; /* Aumenta a letra do botão */
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }

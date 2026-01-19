@@ -220,11 +220,13 @@ function confirmProperties() {
 
     propertyModal.hide();
     updatePlayerList();
+    saveToLocalStorage(); // <--- ADICIONADO: Salva a alteração
 }
 
 function removeProperty(index, propIndex) {
     if (confirm("Tem certeza que deseja remover esta propriedade?")) {
         players[index].properties.splice(propIndex, 1);
         updatePlayerList();
+        saveToLocalStorage(); // <--- ADICIONADO: Salva a alteração
     }
 }

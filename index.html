@@ -8,7 +8,17 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="container py-4">
-    <h1 class="text-center mb-4">Gerenciador de Jogadores</h1>
+    <div class="theme-switch-wrapper top-right">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" onchange="toggleTheme()" />
+            <div class="slider">
+                <span class="sun"> </span>
+                <span class="moon">🌙</span>
+            </div>
+        </label>
+    </div>
+
+    <h1 class="text-center mb-4 mt-5">Gerenciador de Jogadores</h1>
     
     <div class="row mb-4">
         <div class="col-md-3">
@@ -26,45 +36,23 @@
         <div class="col-md-3 d-flex align-items-end">
             <button class="btn btn-primary mb-3 w-100" onclick="addPlayer()">Adicionar Jogador</button>
         </div>
-        <!-- Switch de Tema -->
-        <div class="col-md-3 d-flex align-items-end justify-content-center">
-            <div class="theme-switch-wrapper" style="margin-bottom: 12px;">
-                <label class="theme-switch" for="checkbox">
-                    <input type="checkbox" id="checkbox" onchange="toggleTheme()" />
-                    <div class="slider">
-                        <span class="sun">☀️</span>
-                        <span class="moon">🌙</span>
-                    </div>
-                </label>
-            </div>
-        </div>
     </div>
     
     <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <button class="btn btn-success w-100" onclick="exportData('json')">Exportar JSON</button>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <button class="btn btn-success w-100" onclick="exportData('markdown')">Exportar Markdown</button>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <button class="btn btn-success w-100" onclick="exportData('pdf')">Exportar PDF</button>
-        </div>
-        <div class="col-md-3" style="position: relative;">
-            <button class="btn btn-secondary w-100" onclick="openPropertyEditor()">⚙️ Gerenciar Nomes das Propriedades</button>
-            <span class="badge bg-danger rounded-pill button-new">NOVO</span>
         </div>
     </div>
 
     <div class="row mb-4">
         <div class="col-md-3">
-            <button class="btn btn-success w-100" onclick="openSaveGameModal()">💾 Salvar Jogo</button>
-        </div>
-        <div class="col-md-3">
-            <button class="btn btn-primary w-100" onclick="openLoadGameModal()">📂 Carregar Jogo</button>
-        </div>
-        <div class="col-md-3">
-            <button class="btn btn-warning w-100" onclick="newSave()">🆕 Novo Save</button>
+            <button class="btn btn-warning w-100" onclick="newSave()">Limpar</button>
         </div>
         <div class="col-md-3">
             <button class="btn btn-info w-100" onclick="loadSaveFromFile()">📥 Importar Arquivo</button>
@@ -198,8 +186,6 @@
     <script src="js/globalsVariables.js"></script>
 
     <script src="js/saveLocal.js"></script>
-    <script src="js/saveIntegrity.js"></script>
-    <script src="js/saveCloud.js"></script>
 
     <script src="js/theme.js"></script>
     <script src="js/export.js"></script>

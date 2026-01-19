@@ -18,7 +18,19 @@ function exportData(format) {
 }
 
 function exportJSON() {
-    const dataStr = JSON.stringify(players, null, 2);
+    // 1. Limpeza de segurança: Filtra apenas jogadores válidos
+    const cleanPlayers = players.filter(p => p && p.name).map(player => ({
+        name: player.name.trim(),
+        money: parseFloat(player.money) || 0,
+        properties: Array.isArray(player.properties) ? player.properties : [],
+        notes: player.notes || ""
+    }));
+
+    // 2. Garante que salvamos o estado atual antes de exportar
+    saveToLocalStorage();
+
+    // 3. Gera o arquivo
+    const dataStr = JSON.stringify(cleanPlayers, null, 2);
     const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
 
     const exportFileDefaultName = 'gerenciador-jogadores.json';
