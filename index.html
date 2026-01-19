@@ -114,24 +114,32 @@
 
     <!-- Modal para seleção múltipla de propriedades -->
     <div class="modal fade" id="propertyModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content bg-dark text-light">
-                <div class="modal-header">
-                    <h5 class="modal-title">Selecionar Propriedades</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title">Selecionar Propriedades</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="mb-3">
+                    <input type="text" 
+                           id="propertySearchInput" 
+                           class="form-control" 
+                           placeholder="🔍 Digite para buscar..." 
+                           oninput="filterProperties()">
                 </div>
-                <div class="modal-body">
-                    <div class="property-selection">
-                        <div id="propertyCheckboxes"></div>
-                    </div>
+                <div class="property-selection">
+                    <div id="propertyCheckboxes"></div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="confirmProperties()">Confirmar</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="confirmProperties()">Confirmar</button>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Modal para edição de propriedades -->
     <div class="modal fade" id="propertyEditorModal" tabindex="-1" aria-hidden="true">
@@ -189,6 +197,7 @@
 
     <script src="js/theme.js"></script>
     <script src="js/export.js"></script>
+    <script src="js/findProperty.js"></script>
     <script src="js/property.js"></script>
     <script src="js/player.js"></script>
 

@@ -196,6 +196,10 @@ function openPropertySelection(index) {
         });
     });
     propertyModal.show();
+
+    if(typeof setupPropertySearch === 'function') {
+        setupPropertySearch();
+    }
 }
 
 function confirmProperties() {
