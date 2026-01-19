@@ -10,7 +10,7 @@ const defaultProperties = [
     "Av. São João", "Av. Ipiranga", "Rua Brigadeiro Faria Lima", "Av. Paulista", "Av. Recife",
     "Juscelino Kubitschek", "Rua Oscar Freire", "Av. Ibirapuera", "Av. Vieira Souto", "Av. Presidente Vargas",
     "Av. Niemeyer", "Ações do Banco Itaú", "Ações da TAM viagens", "Ações dos Postos Ipiranga",
-    "Ações da Nivea", "Ações da Vivo", "Ações da Fiat"
+    "Ações da Nivea", "Ações da Vivo", "Ações da Fiat", "TEESTES DE PROPRIEDADE"
 ];
 
 let availableProperties = [...defaultProperties];

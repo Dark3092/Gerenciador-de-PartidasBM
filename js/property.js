@@ -1,17 +1,8 @@
 
-
-
 function loadCustomProperties() {
-    const saved = localStorage.getItem('customProperties');
-    if (saved) {
-        try {
-            availableProperties = JSON.parse(saved);
-        } catch (e) {
-            availableProperties = [...defaultProperties];
-        }
-    } else {
-        availableProperties = [...defaultProperties];
-    }
+    availableProperties = [...defaultProperties];
+
+    localStorage.setItem('customProperties', JSON.stringify(availableProperties));
 }
 
 // Função auxiliar apenas para desenhar a lista (SEM ABRE MODAL)
