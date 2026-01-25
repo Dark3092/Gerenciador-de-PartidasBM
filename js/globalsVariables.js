@@ -4,13 +4,36 @@ let currentPlayerForProperties = -1;
 let propertyModal = null; // Instância do Bootstrap Modal
 
 // Dados Padrão
-const defaultProperties = [
-    "Av. 9 de julho", "Av. Brasil", "Av. Beira Mar", "Av. Rio Branco", "Av. do Estado", "Av. do Contorno",
-    "Av. Rebouças", "Av. Santo Amaro", "Rua da Consolação", "Av. Morumbi", "Av. Higienópolis",
-    "Av. São João", "Av. Ipiranga", "Rua Brigadeiro Faria Lima", "Av. Paulista", "Av. Recife",
-    "Juscelino Kubitschek", "Rua Oscar Freire", "Av. Ibirapuera", "Av. Vieira Souto", "Av. Presidente Vargas",
-    "Av. Niemeyer", "Ações do Banco Itaú", "Ações da TAM viagens", "Ações dos Postos Ipiranga",
-    "Ações da Nivea", "Ações da Vivo", "Ações da Fiat", "TEESTES DE PROPRIEDADE"
-];
+const defaultProperties =
+    [
+        "Leblon",
+        "Av. Presidente Vargas",
+        "Av. Nossa Senhora de Copacabana",
+        "Companhia ferroviária", 
+        "Av. Brigadeiro Faria Lima",
+        "Companhia de Viacao", 
+        "Av. reboucas", 
+        "Av. 9 de julho", 
+        "Av. Europa", 
+        "Rua Augusta", 
+        "Av. Pacaembu", 
+        "Comphania de Taxi", 
+        "Interlagos", 
+        "Morumbi", 
+        "Flamengo", 
+        "Botafogo", 
+        "Comphania de Navegacao", 
+        "Av. Brasil", 
+        "Av. Paulista", 
+        "Jardim Europa", 
+        "Copacabana", 
+        "Comphania de Aviacao", 
+        "Av. Vieira Souto", 
+        "Av. Atlantica", 
+        "Comphania de Taxi Aereo", 
+        "Ipanema", 
+        "Jardim Paulista", 
+        "Brooklin"
+    ];
 
 let availableProperties = [...defaultProperties];
